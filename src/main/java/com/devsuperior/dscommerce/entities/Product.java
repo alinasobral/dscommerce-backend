@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -98,5 +99,19 @@ public class Product {
 
     public List<Order> getOrders() {
         return items.stream().map(x -> x.getOrder()).toList();
+    }
+
+    /*Os métodos equals e hashCode servem para comparar uma entidade com a outra, nessa classe usamos o id*/
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

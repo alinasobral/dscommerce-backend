@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -94,4 +95,18 @@ public class Order {
     para product através do os métodos stream().mpa(). Ou seja para cada x do OrderItem eu transformo
     em x.getProduct, com isso será construída uma lista de Product e não mais de OrderItem. Depois uso o
     método .toList() para transformar em lista novamente.*/
+
+    /*Os métodos equals e hashCode servem para comparar uma entidade com a outra, nessa classe usamos o id*/
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+        return Objects.equals(id, order.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

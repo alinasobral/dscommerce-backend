@@ -4,6 +4,8 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import java.util.Objects;
+
 /*Essa classse é criada, pois o relacionamento Muitos-para-muitos entre Order e Product criou uma terceira tabela
 que tem mais dois atributos próprios. Então essa terceira tabela terá chave primária composta (pela chave da tabela
 order e pela chave da tabela product. Por isso, essa classe OrderItemPK é criada para colocar as chaves primárias de
@@ -37,4 +39,22 @@ public class OrderItemPK {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    /*Os métodos equals e hashCode servem para comparar uma entidade com a outra, nessa classe usamos o id*/
+    /*Como nessa classe temos chave composta, então devemos deixar maercado as duas*/
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrderItemPK that = (OrderItemPK) o;
+        return Objects.equals(order, that.order) && Objects.equals(product, that.product);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(order);
+        result = 31 * result + Objects.hashCode(product);
+        return result;
+    }
+
 }
