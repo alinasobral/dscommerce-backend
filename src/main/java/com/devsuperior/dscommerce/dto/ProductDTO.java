@@ -26,7 +26,9 @@ public class ProductDTO {
 
     /*Esse construtor foi criado para que o novo objeto dto
     * instaciado em ProductService pegue esses dados do banco
-    de dados*/
+    de dados. Essa é a forma manual, ela também pode ser feita com
+    set ao invés do construtor, aí poderia colocar o set aqui nessa
+    classe.*/
     public ProductDTO(Product entity) {
         id = entity.getId();
         name = entity.getName();

@@ -4,11 +4,14 @@ import com.devsuperior.dscommerce.dto.ProductDTO;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 /*A anotation @RestController serve para configurar o spring para que
@@ -32,15 +35,19 @@ public class ProductController {
     private ProductService service;/*Aqui cria-se uma dependencia
     pois a camada de controladores depende da camada de serviços*/
 
-    @GetMapping(value = "/{id}")
-    public ProductDTO findById(@PathVariable Long id) {
+    @GetMapping(value = "/{id}")//Esse parâmetro casa com o id abaixo
+    public ProductDTO findById(@PathVariable Long id) {//e essa anotation serve para configurar isso, para que id de cima case o id de baixo
        ProductDTO dto = service.findById(id);
        return dto;
 
        /*FORMA RESUMIDA DO CÓDIGO ACIMA:
        return service.findById(id);*/
     }
-
-
+    /*Esse método serve para listar todos os produtos e não apenas um
+    e de forma paginada*/
+    @GetMapping
+    public Page<ProductDTO> findAll(Pageable pageable) {
+        return service.findAll(pageable);
+    }
 
 }
