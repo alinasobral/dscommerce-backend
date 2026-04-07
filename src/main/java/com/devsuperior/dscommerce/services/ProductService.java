@@ -92,11 +92,35 @@ public class ProductService {
     */
 
     //Método para buscar todos os produtos e mostrar de forma paginada
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) //dá um lock no banco para fazer apenas leitura
     public Page<ProductDTO> findAll(Pageable pageable) {
         Page<Product> result = repository.findAll(pageable);
         return result.map(x -> new ProductDTO(x));
     }
+
+    /*Método para inserir um novo produto: Essa geralmente é uma
+    requisição que vem do frontend, como quando o usuário clica
+    em adicionar novo produto, preenche o formulário com os dados
+    do produto e clica em salvar. Esses dados vão em formato JSON
+    para a camada de controladores REST (essa classe que estamos)
+    e vão para a cama de serviços no formato DTO*/
+    /*Para testar essa requisição vinda do frontend, usamos o
+    postman. Lá criamos uma nova requisição, colocamos o tipos
+    como POST, e configuramos o body a requisição para raw e co-
+    locamos o formato nem JSON, que é o formato que vem do frontend*/
+    @Transactional
+    public ProductDTO insert(ProductDTO dto) {
+
+        Product entity = new Product();
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
+
+        entity = repository.save(entity);
+        return new ProductDTO(entity);
+    }
+
 
 }
 
