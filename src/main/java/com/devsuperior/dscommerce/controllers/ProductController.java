@@ -71,11 +71,13 @@ public class ProductController {
         return ResponseEntity.ok(dto);
     }
 
-    /*Método de inserir um novo produto. Depois de configurar a
-    classe DTO, configuramos a camada de controlador para receber
-    a requisição POST vinda do frontend*/
+    /*Método de inserir um novo produto: Depois de configurar a
+    classe ProductService (camada de serviços), configuramos a
+    camada de controlador para receber a requisição POST vinda do
+    frontend*/
     /*A anotation @RequestBody serve para informar que o argumento
-    ProductDTO dto vai ser o body da requisição JSON do frontend*/
+    ProductDTO dto vai ser o body da requisição JSON do frontend,
+    ou seja, vai ser o body é o bloco de informações do produto.*/
      /*Foi acrescentado o método ResponseEntity para personalizar
     a resposta no postman, que é onde aparece o código e um OK
     ao lado. Neste método, como é de inserir, ou seja, criar um
@@ -109,6 +111,33 @@ public class ProductController {
         return ResponseEntity.created(uri).body(dto);
         /*FORMA RESUMIDA:
          return service.insert(dto)*/
+    }
+
+    /*Método de atualizar um produto: Depois de configurar a
+    classe ProductService (camada de serviços), configuramos a
+    camada de controlador para receber a requisição PUT vinda do
+    frontend*/
+    /*Aqui fazemos quase que uma espécie de junção entre o método
+    de buscar por Id e o método de inserir, pois como falei na
+    observação do método de atualizar na camada de serviços, as
+    informações do produto são puxadas pelo id, então usamos o
+    método update e passamos como argumento o id e seu tipo e mais
+    o tipo dos dados do corpo da requisição e a variável que lhe
+    representa que no caso é dto. Além disso, usamos duas anotations,
+    uma que serve para configurar que o id de cima (id da rota) case
+    com o id de baixo (id do argumento que vai ser passado)que é a
+    anotation @PathVariable (usada no método de buscar por id) e a
+    outra é a anotation @RequestBody (usada no métedo de inserir)
+    que serve para configurar que o objeto DTO passado como argumento
+    seja vinculado ao body da requisição HTTP vinda do frontend.
+    Depois dizemos que para o sistema que o objeto dto deve receber
+    o instanciamento de service com o método update, passando como
+    argumento o id e o objeto dto.
+    Por fim, o return retorna o objeto dto atualizado*/
+    @PutMapping(value = "/{id}")//Esse parâmetro é referente a rota, pois ele espera o id para mostrar o produto
+    public ResponseEntity<ProductDTO>  update(@PathVariable Long id, @RequestBody ProductDTO dto) {
+        dto = service.update(id, dto);
+        return ResponseEntity.ok(dto);
     }
 
 }

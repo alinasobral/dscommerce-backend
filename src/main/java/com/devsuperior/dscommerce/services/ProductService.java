@@ -103,24 +103,60 @@ public class ProductService {
     em adicionar novo produto, preenche o formulário com os dados
     do produto e clica em salvar. Esses dados vão em formato JSON
     para a camada de controladores REST (essa classe que estamos)
-    e vão para a cama de serviços no formato DTO*/
+    e vão para a camada de serviços no formato DTO que chamamos
+    de body (todos os dados juntos é o corpo). No método de inserir,
+    a gente cria o novo objeto, copia dos dados da entidade e salva
+    no repositório (camada de banco de dados). Método copyDtoToEntity
+    foi criado porque a função de copiar os dados se repete no
+    método de atualizar os dados de um produto*/
     /*Para testar essa requisição vinda do frontend, usamos o
-    postman. Lá criamos uma nova requisição, colocamos o tipos
-    como POST, e configuramos o body a requisição para raw e co-
-    locamos o formato nem JSON, que é o formato que vem do frontend*/
+    postman. Lá criamos uma nova requisição, colocamos o tipo
+    como POST, e configuramos o body, a requisição para raw e co-
+    locamos o formato em JSON, que é o formato que vem do frontend*/
     @Transactional
     public ProductDTO insert(ProductDTO dto) {
+        Product entity = new Product(); //instancia novo objeto
+        copyDtoToEntity(dto, entity); //copia os dados DTO da entidade
+        entity = repository.save(entity); //salva no repositório (banco de dados)
+        return new ProductDTO(entity);
+    }
 
-        Product entity = new Product();
+    /*Método para atualizar dados de um produto: Esse método é
+    também uma requisição vinda do frontend, quando o usuário
+    clica na canetinha para mudar os dados de um produto. Assim,
+    como no método criar um novo produto, esses dados vão em
+    formato JSON para a camada de controladores REST (essa classe
+    que estamos) e vão para a camada de serviços no formato DTO,
+    que chamamos de body (todos os dados juntos é o corpo).
+    O método de atulizar é parecido com o método de inserir, mas
+    ao invés de instaciar um novo objeto, nós pedimos para o sis-
+    tema pegar a refência dos dados do produto pelo Id, por isso
+    usa-se o método .getReferenceById e passamos o argumento id.
+    Como usamos o Id do produto, então no update passamos como
+    argumento não só o corpo que é um ProductDTO, mas também o Id
+    e o tipo dele. Depois pegar os dados pelo Id, os dados são
+    para a entidade e depois é salvo no repositório(camada de dados)*/
+    /*Para testar essa requisição vinda do frontend, usamos o
+    postman. Lá criamos uma nova requisição, colocamos o tipo
+    como PUT, e configuramos o body, a requisição para raw e co-
+    locamos o formato em JSON, que é o formato que vem do frontend.
+    No body nós colocamos o dado com as informações atualizadas
+    do produto.*/
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO dto) {
+        Product entity = repository.getReferenceById(id); //instacia com a referência (ou seja, puxa os dados pelo id)
+        copyDtoToEntity(dto,entity); //copia os dados DTO para a entidade
+        entity = repository.save(entity); //salva no repositório (camada do banco de dados)
+        return new ProductDTO(entity);
+    }
+
+    //Método de copiar o dado DTO para a Entidade:
+    private void copyDtoToEntity(ProductDTO dto, Product entity) {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImgUrl(dto.getImgUrl());
-
-        entity = repository.save(entity);
-        return new ProductDTO(entity);
     }
-
 
 }
 
