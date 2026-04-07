@@ -140,4 +140,27 @@ public class ProductController {
         return ResponseEntity.ok(dto);
     }
 
+    /*Método para deletar um produto: Depois de configurar a
+    classe ProductService (camada de serviços), configuramos a
+    camada de controlador para receber a requisição DELETE vinda do
+    frontend.
+    Como é um método que não irá retornar nada, pois é de apagar
+    algo, então colocamos o void com V maiúsculo dentro do Respon-
+    seEntity para informar que irá retornar vazio. No método delete
+    passamos como argumento o id e o tipo dele, pois é como o pro-
+    duto será identificado e colocamos a anotation @PathVariable
+    para configurar que o id de cima (id da rota) case com o id
+    de baixo (id do argumento que vai ser passado).
+    Depois instanciamos e service com o método .delete e passamos
+    o id como parâmetro.
+    Por fim, usamos os método .noContent() para que o ResponseEntity
+    retorne vazio e o código que apareça no postman seja código de
+    delete que é o número 204 e o método .build() para construir
+    isso.*/
+    @DeleteMapping(value = "/{id}")//Esse parâmetro é referente a rota, pois ele espera o id para identificar o produto
+    public ResponseEntity<Void>  delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

@@ -158,5 +158,21 @@ public class ProductService {
         entity.setImgUrl(dto.getImgUrl());
     }
 
+    /*Método para deletar um prduto: Esse método é também uma
+    requisição vinda do frontend, quando o usuário clica no
+    ícone de lixeiro para excluir um produto listado.
+    Assim, é um método de deletar, ele não irá retornar nenhum
+    valor, então usamos o void, pois é um método que não tem
+    um retorno.
+    No método delete passamos como argumento o id e seu tipo, pois
+    é através dele que o produto é identificado e deletado na ca-
+    mada de acesso a dados (banco de dados).
+    Por fim, usamos o método .deleteById que tem a função de dele-
+    tar pelo Id e passamos como argumento o id do produto.*/
+    @Transactional
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+
 }
 
