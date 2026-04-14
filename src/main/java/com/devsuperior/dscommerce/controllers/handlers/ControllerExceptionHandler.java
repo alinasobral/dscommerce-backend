@@ -102,6 +102,43 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(status).body(err);
     }
 
+    /* Método responsável por tratar exceções de validação lançadas pelo Spring
+     * quando os dados da requisição não passam nas validações (@Valid).
+     *
+     * 📌 O que é MethodArgumentNotValidException?
+     * É a exceção lançada automaticamente pelo Spring
+     * quando um objeto enviado na requisição possui campos inválidos.
+     *
+     * 📌 Fluxo do método:
+     *
+     * 1. Define o status HTTP 422 (UNPROCESSABLE_CONTENT)
+     *    → significa que o servidor entendeu a requisição,
+     *      mas não consegue processar devido a dados inválidos
+     *
+     * 2. Cria um objeto ValidationError (erro completo)
+     *    → contém os dados gerais do erro + lista de erros de campos
+     *
+     * 3. Percorre todos os erros de validação:
+     *    e.getBindingResult().getFieldErrors()
+     *
+     *    Para cada erro:
+     *    - pega o nome do campo → f.getField()
+     *    - pega a mensagem → f.getDefaultMessage()
+     *    - adiciona na lista usando addError()
+     *
+     * 4. Retorna a resposta HTTP com todos os erros estruturados
+     *
+     * 📌 Resultado:
+     * O cliente (frontend) recebe uma lista detalhada de erros,
+     * podendo exibir mensagens específicas em cada campo do formulário.
+     *
+     * 📌 Benefício:
+     * Esse padrão é amplamente utilizado em APIs profissionais,
+     * pois facilita o tratamento de erros no frontend.
+     *
+     * OBS: CustomError → erro geral
+     * ValidationError → erro geral + lista de erros
+     * FieldMessage → erro de UM campo*/
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CustomError> methodArgumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.UNPROCESSABLE_CONTENT;
