@@ -3,6 +3,7 @@ package com.devsuperior.dscommerce.controllers;
 import com.devsuperior.dscommerce.dto.ProductDTO;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,10 +76,14 @@ public class ProductController {
     classe ProductService (camada de serviços), configuramos a
     camada de controlador para receber a requisição POST vinda do
     frontend*/
-    /*A anotation @RequestBody serve para informar que o argumento
-    ProductDTO dto vai ser o body da requisição JSON do frontend,
-    ou seja, vai ser o body é o bloco de informações do produto.*/
-     /*Foi acrescentado o método ResponseEntity para personalizar
+    /*A anotation @Valid serve para sempre que um dto for recebido
+    no corpo da requisição do post ele passe pelas validações que
+    foram inseridas acima dos atributos na classe ProductDTO e a
+    anotation @RequestBody serve para informar que o argumento
+    ProductDTO dto vai ser o body (corpo da requisição JSON do
+    frontend, ou seja, vai ser o body é o bloco de informações do
+    produto.*/
+    /*Foi acrescentado o método ResponseEntity para personalizar
     a resposta no postman, que é onde aparece o código e um OK
     ao lado. Neste método, como é de inserir, ou seja, criar um
     novo produto, então o código certo que deveria aparecer é o
@@ -105,7 +110,7 @@ public class ProductController {
     no postman passando o argumento dto, pois é o objeto que será
     criado*/
     @PostMapping
-    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto) {
         dto = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
@@ -123,19 +128,22 @@ public class ProductController {
     informações do produto são puxadas pelo id, então usamos o
     método update e passamos como argumento o id e seu tipo e mais
     o tipo dos dados do corpo da requisição e a variável que lhe
-    representa que no caso é dto. Além disso, usamos duas anotations,
+    representa que no caso é dto. Além disso, usamos três anotations,
     uma que serve para configurar que o id de cima (id da rota) case
     com o id de baixo (id do argumento que vai ser passado)que é a
-    anotation @PathVariable (usada no método de buscar por id) e a
-    outra é a anotation @RequestBody (usada no métedo de inserir)
-    que serve para configurar que o objeto DTO passado como argumento
-    seja vinculado ao body da requisição HTTP vinda do frontend.
+    anotation @PathVariable (usada no método de buscar por id), a
+    outra é a anotation @Valid serve para sempre que um dto for re-
+    cebido no corpo da requisição do post ele passe pelas valida-
+    ções que foram inseridas acima dos atributos na classe ProductDTO
+    e a anotation @RequestBody (usada no métedo de inserir) que ser-
+    ve para configurar que o objeto DTO passado como argumento se-
+    ja vinculado ao body da requisição HTTP vinda do frontend.
     Depois dizemos que para o sistema que o objeto dto deve receber
     o instanciamento de service com o método update, passando como
     argumento o id e o objeto dto.
     Por fim, o return retorna o objeto dto atualizado*/
     @PutMapping(value = "/{id}")//Esse parâmetro é referente a rota, pois ele espera o id para mostrar o produto
-    public ResponseEntity<ProductDTO>  update(@PathVariable Long id, @RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO>  update(@PathVariable Long id, @Valid @RequestBody ProductDTO dto) {
         dto = service.update(id, dto);
         return ResponseEntity.ok(dto);
     }
