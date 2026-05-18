@@ -16,19 +16,18 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")//Serve para salvar no banco de dados o Instant no padrão UTC
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
     private OrderStatus status;
-    //LADO DO MUITOS (MUITOS PARA UM/UM PARA MUITOS) - RELAÇAO ORDER E USER
-    @ManyToOne //Estabelece a relação muitos para um
-    @JoinColumn(name = "client_id") //Estabelece o nome da chave estrangeira
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
     private User client;
 
-    //UM PARA UM: LADO UM NAO DEPENDENTE - RELAÇAO ORDER E PAYMENT
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
-    @OneToMany(mappedBy = "id.order") //associa ao OrderItem através da chave id.order que está dentro de OrderItemPK
+    @OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
 
     public Order() {
@@ -91,12 +90,7 @@ public class Order {
     public List<Product> getProducts() {
         return items.stream().map(x -> x.getProduct()).toList();
     }
-    /*O método getProducts acima serve para pegar os items do tipo OrderItem acima e converter
-    para product através do os métodos stream().mpa(). Ou seja para cada x do OrderItem eu transformo
-    em x.getProduct, com isso será construída uma lista de Product e não mais de OrderItem. Depois uso o
-    método .toList() para transformar em lista novamente.*/
 
-    /*Os métodos equals e hashCode servem para comparar uma entidade com a outra, nessa classe usamos o id*/
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

@@ -7,24 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity //@Entity serve para mapear a entidade user numa tabela de banco de dados
-@Table(name = "tb_user") //@Table serve para dizer como o nome da tabela deve aparecer no banco de dados
+@Entity
+@Table(name = "tb_user")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //para que o id seja auto incrementável no banco
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
-    @Column(unique = true)/*Configuramos para que quando essa coluna for mapeada para o banco de dados, o conteúdo
-    dela será único, pois um e-mail é de apenas um usuário, então ele é único.*/
+    @Column(unique = true)
     private String email;
     private String phone;
     private LocalDate birthDate;
     private String password;
 
-    //LADO DO UM (MUITOS PARA UM/UM PARA MUITOS)
-    @OneToMany(mappedBy = "client") //significa um para muitos mapeado pelo atributo client (que foi instanciado em order)
+    @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
 
     public User() {
@@ -90,10 +88,7 @@ public class User {
     public List<Order> getOrders() {
         return orders;
     }
-    /*OBS: LISTA TEM APENAS GET, POIS UMA LISTA NUNCA É TROCADA,
-    APENAS TEM ELEMENTOS REMOVIDOS OU ADICIONADOS*/
 
-    /*Os métodos equals e hashCode servem para comparar uma entidade com a outra, nessa classe usamos o id*/
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

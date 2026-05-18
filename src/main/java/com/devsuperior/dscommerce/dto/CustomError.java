@@ -2,11 +2,6 @@ package com.devsuperior.dscommerce.dto;
 
 import java.time.Instant;
 
-/*Essa classe foi criada para colocar os atributos que são retornados
-em uma consulta no formato JSON para o usuário. Ela será usada para
-instanciar um objeto dela dentro do método que irá tratar o erro de
-ResourceNotFoundException, que é o erro de recurso não encontrado.*/
-
 public class CustomError {
     private Instant timestamp;
     private Integer status;
@@ -21,18 +16,22 @@ public class CustomError {
     }
 
     public Instant getTimestamp() {
+
         return timestamp;
     }
 
     public Integer getStatus() {
+
         return status;
     }
 
     public String getError() {
+
         return error;
     }
 
     public String getPath() {
+
         return path;
     }
 }

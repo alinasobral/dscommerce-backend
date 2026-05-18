@@ -16,26 +16,18 @@ public class Product {
     private Long id;
     private String name;
 
-    @Column(columnDefinition = "TEXT")/*Aqui configuramos que na hora que essa coluna for mapeada
-    para o banco de dados, ela será do tipo TEXT. Como geralmente é colocado varchar(255) automaticamente
-    pelo hibernate, então mudamos para TEXT porque a descrição pode ser maior do que 255 caracteres.*/
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Double price;
     private String imgUrl;
 
-    //RELAÇAO MUITOS PARA MUITOS - PRODUCT E CATEGORY
-    /*Como na relação M:N criamos uma terceira tabela que fica entre as duas principais, aqui também temod que
-    fazer isso. Então a anotation @JoinTable serve para juntar as tabelas. Então o primeiro nome é desse terceira
-    tabela, depois no joinColumns colocamos o nome da tabela desta classe e no inverseJoinColumns colocamos
-    o nome da outra tabela da relação.*/
     @ManyToMany
     @JoinTable(name = "tb_product_category",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories = new HashSet<>();/*Aqui usamos o Set/HashSet, pois os ids de products
-     e categories não podem se repetir. Então para fazer a lista usamos Set/HashSet e não List/ArrayList.*/
+    private Set<Category> categories = new HashSet<>();
 
-    @OneToMany(mappedBy = "id.product") //associa ao OrderItem através da chave id.product que está dentro de OrderItemPK
+    @OneToMany(mappedBy = "id.product")
     private Set<OrderItem> items = new HashSet<>();
 
     public Product() {
@@ -101,7 +93,6 @@ public class Product {
         return items.stream().map(x -> x.getOrder()).toList();
     }
 
-    /*Os métodos equals e hashCode servem para comparar uma entidade com a outra, nessa classe usamos o id*/
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

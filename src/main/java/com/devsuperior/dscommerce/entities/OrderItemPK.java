@@ -6,19 +6,14 @@ import jakarta.persistence.ManyToOne;
 
 import java.util.Objects;
 
-/*Essa classse é criada, pois o relacionamento Muitos-para-muitos entre Order e Product criou uma terceira tabela
-que tem mais dois atributos próprios. Então essa terceira tabela terá chave primária composta (pela chave da tabela
-order e pela chave da tabela product. Por isso, essa classe OrderItemPK é criada para colocar as chaves primárias de
-order e product(as quais se tornaram chaves estrangeiras) e ela será "chamada" na terceira tabela OrderItem.*/
-@Embeddable //significa que essa classe não será uma tabela real, ela vai estar dentro de outra tabela. É parte de outa entidade.
 public class OrderItemPK {
 
     @ManyToOne
-    @JoinColumn(name = "order_id") //Chave estrangeira de order
+    @JoinColumn(name = "order_id")
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "product_id") //Chave estrangeira de product
+    @JoinColumn(name = "product_id")
     private Product product;
 
     public OrderItemPK() {
@@ -40,8 +35,6 @@ public class OrderItemPK {
         this.product = product;
     }
 
-    /*Os métodos equals e hashCode servem para comparar uma entidade com a outra, nessa classe usamos o id*/
-    /*Como nessa classe temos chave composta, então devemos deixar maercado as duas*/
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

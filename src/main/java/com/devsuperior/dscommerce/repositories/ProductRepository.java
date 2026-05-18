@@ -1,12 +1,16 @@
 package com.devsuperior.dscommerce.repositories;
 
 import com.devsuperior.dscommerce.entities.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-/*Para criar um repository usando o Spring, basta colocar extends
-e depois o tipo do Spring que é JpaRepository<Product, Long> pametrizando dentro
-dos símbolos <> o nome da entidade que será acessado o banco de dados
-e o tipo do ID da entidade.*/
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    @Query("SELECT obj FROM Product obj "
+            + "WHERE UPPER(obj.name) LIKE UPPER(CONCAT('%', :name, '%'))")
+    Page<Product> searchByName(String name, Pageable pageable);
+
 
 }

@@ -15,10 +15,8 @@ public class Category {
     private Long id;
     private String name;
 
-    @ManyToMany(mappedBy = "categories")//Quer dizer que está sendo mapeado pela lista categories que está na classe Product.
-    private Set<Product> products = new HashSet<>();/*(Definição de produtos associados a categoria) Aqui usamos
-     o Set/HashSet, pois os ids de products e categories não podem se repetir. Então para fazer a lista usamos
-     et/HashSet e não List/ArrayList.*/
+    @ManyToMany(mappedBy = "categories")
+    private Set<Product> products = new HashSet<>();
 
     public Category() {
     }
@@ -48,7 +46,6 @@ public class Category {
         return products;
     }
 
-    /*Os métodos equals e hashCode servem para comparar uma entidade com a outra, nessa classe usamos o id*/
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

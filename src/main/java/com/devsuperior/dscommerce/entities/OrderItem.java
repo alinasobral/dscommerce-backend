@@ -10,8 +10,8 @@ import java.util.Objects;
 @Table(name = "tb_order_item")
 public class OrderItem {
 
-    @EmbeddedId //serve para avisar que a classe OrderItemPK será usada como chave primária
-    private OrderItemPK id = new OrderItemPK(); //Quando for a classe auxiliar PK tem que instanciar assim.
+    @EmbeddedId
+    private OrderItemPK id = new OrderItemPK();
 
     private Integer quantity;
     private Double price;
@@ -20,8 +20,8 @@ public class OrderItem {
     }
 
     public OrderItem(Order order, Product product, Integer quantity, Double price) {
-        id.setOrder(order); //Order order está dentro de OrderItemPK
-        id.setProduct(product); //Product product está dentro de OrderItemPK
+        id.setOrder(order);
+        id.setProduct(product);
         this.quantity = quantity;
         this.price = price;
     }
@@ -58,7 +58,6 @@ public class OrderItem {
         this.price = price;
     }
 
-    /*Os métodos equals e hashCode servem para comparar uma entidade com a outra, nessa classe usamos o id*/
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

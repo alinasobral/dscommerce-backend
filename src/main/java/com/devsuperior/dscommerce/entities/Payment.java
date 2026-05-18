@@ -16,13 +16,8 @@ public class Payment {
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
 
-    /*UM PARA UM: CLASSE DEPENDENTE. Pelo diagrama de  classes, a classe
-    payment depende da classe order, pois um pedido pode não ter pagamento,
-    mas um pagamento precisa ter um pedido. Então a multiplicidade é 0..1, ou
-    seja, o mínimo é 0 e o máximo é um, pois ou não existe nenhum pagamento para
-    o pedido ou existe um pagamento para o pedido.*/
     @OneToOne
-    @MapsId //O id do payment vai ser o mesmo de order
+    @MapsId
     private Order order;
 
     public Payment() {
@@ -58,7 +53,6 @@ public class Payment {
         this.order = order;
     }
 
-    /*Os métodos equals e hashCode servem para comparar uma entidade com a outra, nessa classe usamos o id*/
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

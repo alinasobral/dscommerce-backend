@@ -6,20 +6,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-/*O pacote dto foi criado para que seja possível a conversão dos
-dados vindos do bancos sejam convertidos no formato DTO.*/
 public class ProductDTO {
 
     private Long id;
 
-    @Size(min = 3, max = 80, message = "Nome precisa ter de 3 a 80 caracteres") //Essa é uma anotation de validação do jakarta, ela leva como argumento três métodos que é o min que define um tamanho mínimo, o método max que define o tamanho máximo e o método message que exibe uma mensagem de erro ao usuário.
-    @NotBlank(message = "Campo requerido") //Essa é uma anotation de validação do jakarta, ela impede que o atributo seja nulo e que sejam colocados apenas espaços em branco, aceitando apenas sequências de caracteres. Essa anotation pode levar como parâmetro um método, o que usamos é o message, que serve para mostrar uma mensagem de erro ao usuário.
+    @Size(min = 3, max = 80, message = "Nome precisa ter de 3 a 80 caracteres")
+    @NotBlank(message = "Campo requerido")
     private String name;
 
-    @Size(min = 10, message = "Descrição precisa ter no mínimo 10 caracteres") //Essa é uma anotation de validação do jakarta, ela leva como argumento dois métodos que é o min que define um tamanho mínimo e o método message que exibe uma mensagem de erro ao usuário.
+    @Size(min = 10, message = "Descrição precisa ter no mínimo 10 caracteres")
     private String description;
 
-    @Positive(message = "O preço deve ser positivo") //Essa é uma anotation de validação do jakarta. Ela serve para permitir que sejam inseridos apenas valores positivos. Usamos o método message como parâmetro para exibir uma mensagem de erro ao usuário.
+    @Positive(message = "O preço deve ser positivo")
     private Double price;
     private String imgUrl;
 
@@ -34,11 +32,6 @@ public class ProductDTO {
         this.imgUrl = imgUrl;
     }
 
-    /*Esse construtor foi criado para que o novo objeto dto
-    * instaciado em ProductService pegue esses dados do banco
-    de dados. Essa é a forma manual, ela também pode ser feita com
-    set ao invés do construtor, aí poderia colocar o set aqui nessa
-    classe.*/
     public ProductDTO(Product entity) {
         id = entity.getId();
         name = entity.getName();
@@ -46,9 +39,6 @@ public class ProductDTO {
         price = entity.getPrice();
         imgUrl = entity.getImgUrl();
     }
-
-
-    //DTO não precisa ter set, porque os dados não vão ser alterados
 
     public Long getId() {
         return id;
