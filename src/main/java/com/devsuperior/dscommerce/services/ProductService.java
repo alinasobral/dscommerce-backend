@@ -26,6 +26,13 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
+    /*Forma resumida do método abaixo:
+    @Transactional(readOnly = true)
+    public ProductDTO findById(Long id) {
+        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
+        return new ProductDTO(product);
+    }
+    */
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
         Optional<Product> result = repository.findById(id);
