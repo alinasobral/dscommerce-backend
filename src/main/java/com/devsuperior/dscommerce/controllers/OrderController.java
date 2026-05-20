@@ -39,7 +39,10 @@ public class OrderController {
     @Autowired
     private OrderService service;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    /*Aqui fizemos o controle de acesso programático onde o usuário só poderá acessar to-
+    dos os pedidos se for admin ou se for o dono do pedido, então aqui deve ficar ROLE_ADMIN
+    e ROLE_CLIENT.*/
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<OrderDTO>  findById(@PathVariable Long id) {
        OrderDTO dto = service.findById(id);

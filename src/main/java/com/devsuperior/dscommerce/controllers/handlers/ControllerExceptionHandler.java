@@ -3,6 +3,7 @@ package com.devsuperior.dscommerce.controllers.handlers;
 import com.devsuperior.dscommerce.dto.CustomError;
 import com.devsuperior.dscommerce.dto.ValidationError;
 import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
+import com.devsuperior.dscommerce.services.exceptions.ForbiddenException;
 import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -42,5 +43,16 @@ public class ControllerExceptionHandler {
             err.addError(f.getField(), f.getDefaultMessage());
         }
         return ResponseEntity.status(status).body(err); // Retorna a resposta HTTP com os erros formatados
+    }
+
+    /*CONTROLE DE ACESSO PROGRAMÁTICO SELF OU ADMIN - PASSO 3
+    Depois de criar a classe da ForbiddenException agora tratamos essa exceção aqui no handler. Então co-
+    piamos o método databese e apenas trocamos onde tinha Database para Forbidden e o status http coloca-
+    mos FORBIDDEN para aparecer o erro 403 na requisição. Depois voltamos para OrderService.*/
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<CustomError> forbidden(ForbiddenException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
     }
 }

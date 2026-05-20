@@ -16,27 +16,29 @@ que terá dentro dele o id do produto, o nome do produto, o preço do produto, a
 de e o subtotal, e finalizando o objeto json terá o total do pedido.
 
 PASSO 3: Aqui criamos a classe do terceiro objeto aninhado que é o items, então criamos
-a classe OrderItemtDTO que terá os atributos de id, nome, preço e quantidade, o subtotal
-criaremos um método getSubtotal e dentro colocaremos o cáculo de multiplicação da quanti-
-dade pelo preço do produto. Colocamos o construtor vazio, o padrão e o da entidade OrderItem,
-alé dos gets. No construtor da entidade no id usamos o getProduct e depois o getId, faremos
-o mesmo para name, price e quantity podemos fazer direto o getPrice e o getQuantity.
-Depois de termos criado todas as classes DTO referentes aos objetos aninhados, vamos cri-
-ar a classe o pedido chamada de OrderDTO.*/
+a classe OrderItemtDTO que terá os atributos de id, nome, preço, quantidade, o url da ima-
+gem do produto, o subtotal criaremos um método getSubtotal e dentro colocaremos o cáculo
+de multiplicação da quantidade pelo preço do produto. Colocamos o construtor vazio, o pa-
+drão e o da entidade OrderItem, além dos gets. No construtor da entidade no id usamos o
+getProduct e depois o getId, faremos o mesmo para name e imgUrl, price e quantity podemos
+fazer direto o getPrice e o getQuantity. Depois de termos criado todas as classes DTO re-
+ferentes aos objetos aninhados, vamos criar a classe o pedido chamada de OrderDTO.*/
 public class OrderItemDTO {
     private Long productId;
     private String name;
     private Double price;
     private Integer quantity;
+    private String imgUrl;
 
     public OrderItemDTO() {
     }
 
-    public OrderItemDTO(Long productId, String name, Double price, Integer quantity) {
+    public OrderItemDTO(Long productId, String name, Double price, Integer quantity, String imgUrl) {
         this.productId = productId;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.imgUrl = imgUrl;
     }
 
     public OrderItemDTO(OrderItem entity) {
@@ -44,6 +46,7 @@ public class OrderItemDTO {
         name = entity.getProduct().getName();
         price = entity.getPrice();
         quantity = entity.getQuantity();
+        imgUrl = entity.getProduct().getImgUrl();
     }
 
     public Long getProductId() {
@@ -60,6 +63,10 @@ public class OrderItemDTO {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
     }
 
     public Double getSubtotal() {

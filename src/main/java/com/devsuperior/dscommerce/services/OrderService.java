@@ -47,10 +47,27 @@ public class OrderService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+    @Autowired
+    private AuthService authService;
+
+    /*FAZENDO CONTROLE DE ACESSO PROGRAMÁTICO SELF OU ADMIN
+    PASSO 1: Aqui vamos criar um controle de acesso onde só poderá acessar todos os pe-
+    didos quem for ADMIN e o CLIENT só poderá acessar o pedido que for dono. Então para
+    isso primeiro criamos uma exception chamada ForbiddenException no pacote de exceptions.
+    Depois de ter criado a classe da exception e de ter feito o tratamento dela nos handlers,
+    vamos desenvolver lógica desse controle de acesso. Para isso criamos uma classe chamada
+    AuthService para desenvolver regras de negócio relacionada a controle de acesso. Depois
+    de criada a classe e criado o método para fazer o teste lógico que resultará no controle
+    de acesso, nós instanciamos essa classe aqui e usamos esse método dentro do método abaixo.
+    então usamos objeto AuthService instanciado junto com o método criado validateSelfOrAdmin
+    passando como parâmetro o id do cliente do pedido, então usando o objeto order junto com
+    .getClient() para pegar as informações do cliente e depois .getId() para pegar o Id desse
+    cliente que é dono do pedido.*/
     @Transactional(readOnly = true)
     public OrderDTO findById(Long id) {
         Optional<Order> result = repository.findById(id);
         Order order = result.orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
+        authService.validateSelfOrAdmin(order.getClient().getId());
         OrderDTO dto = new OrderDTO(order);
         return dto;
     }
@@ -93,7 +110,7 @@ public class OrderService {
     O que vai ser passado no postman é a apenas a lista de itens, mas no resultado mos-
     trará tudo. Então depois de instaciado o novo objeto Order, devemos setar cada atri-
     buto do resumo do pedido. Então fazemos um order.SetMoment e passamos como parâmetro
-    Instant.now() que pega o mesmo instante da requisição, depois fazemos um order.setStatus
+    Instant.now() que pega o exato instante da requisição, depois fazemos um order.setStatus
     e passamos como parâmetro OrderStatus.WAITING.PAYMENT, pois um pedido que acaba de ser
     feito está aguardando o pagamento. Depois temos que setar os dados do cliente autenti-
     cado, para isso temos o método authenticated() que fica na classe UserService, então
