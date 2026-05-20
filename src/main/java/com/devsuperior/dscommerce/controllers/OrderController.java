@@ -1,11 +1,16 @@
 package com.devsuperior.dscommerce.controllers;
 
 import com.devsuperior.dscommerce.dto.OrderDTO;
+import com.devsuperior.dscommerce.dto.ProductDTO;
 import com.devsuperior.dscommerce.services.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 /*CRIAÇAO DE RESUMO DE UMA COMPRA: No caso de uso, o último item pedido é o cenário de
 Registrar pedido, sendo que o cenário principal de sucesso junta os dados do carrinho
@@ -40,4 +45,22 @@ public class OrderController {
        OrderDTO dto = service.findById(id);
        return ResponseEntity.ok(dto);
     }
+
+    /*SALVANDO UM NOVO PEDIDO
+    PASSO 1: No caso de uso temos a exigência do salvamento do pedido, ou seja, salvar
+    o pedido quando a compra acabou de ser realizada pelo cliente. Então aqui no con-
+    troller precisamos criar a requisição POST, ela será autorizada apenas para o usu-
+    ário que tiver o role de cliente. Aqui copiamos a requisição POST do ProductContro-
+    ller e mudamos apenas de ProductDTO para OrderDTO, o restante foi mantido. Além dis-
+    so, adicionamos na classe OrderDTO acima da lista OrderItemDTO a validação @NotEmpty,
+    pois o pedido deve ter pelo menos um item. Depois disso, vamos para a classe Order-
+    Service para implementar o método insert.*/
+    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    @PostMapping
+    public ResponseEntity<OrderDTO> insert(@Valid @RequestBody OrderDTO dto) {
+        dto = service.insert(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
+    }
+
 }
