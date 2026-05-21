@@ -2,7 +2,6 @@ package com.devsuperior.dscommerce.dto;
 
 import com.devsuperior.dscommerce.entities.Category;
 
-/*Classe criada para podermos fazer a lista de categorias no ProductDTO*/
 public class CategoryDTO {
     private Long id;
     private String name;

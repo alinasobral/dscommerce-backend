@@ -42,13 +42,9 @@ public class ControllerExceptionHandler {
         for(FieldError f : e.getBindingResult().getFieldErrors()) {
             err.addError(f.getField(), f.getDefaultMessage());
         }
-        return ResponseEntity.status(status).body(err); // Retorna a resposta HTTP com os erros formatados
+        return ResponseEntity.status(status).body(err);
     }
 
-    /*CONTROLE DE ACESSO PROGRAMÁTICO SELF OU ADMIN - PASSO 3
-    Depois de criar a classe da ForbiddenException agora tratamos essa exceção aqui no handler. Então co-
-    piamos o método databese e apenas trocamos onde tinha Database para Forbidden e o status http coloca-
-    mos FORBIDDEN para aparecer o erro 403 na requisição. Depois voltamos para OrderService.*/
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<CustomError> forbidden(ForbiddenException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.FORBIDDEN;

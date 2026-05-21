@@ -26,13 +26,6 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    /*Forma resumida do método abaixo:
-    @Transactional(readOnly = true)
-    public ProductDTO findById(Long id) {
-        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
-        return new ProductDTO(product);
-    }
-    */
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
         Optional<Product> result = repository.findById(id);
@@ -67,18 +60,7 @@ public class ProductService {
             throw new ResourceNotFoundException("Recurso não encontrado");
         }
     }
-    /*Depois de fazer todas as alterações no ProductDTO em relação as categorias, aqui
-    também devemos acrescentar um for para que a lista de categorias DTO seja copiada
-    para a entidade. Antes disso, usamos o método .clear() em entity.getCategories()
-    para limpar as entidade que já estivesse no produto antes de fazer o update, por
-    exemplo. No for a lógica é que para cada CategoryDTO chamado de catDTO que
-    existem na lista dto.getCategories(), instanciamos um novo objeto Category que cha-
-    mamos de cat. Como insert e no update são passados os ids da categorias, então set-
-    tamos o Id do objeto category pegando o id do objeto CategoryDTO que foi passado na
-    requisição, ou seja, assim estamos copiando o Id DTO para ser colocado no objeto cat
-    da entidade Category, fazendo assim a cópia de DTO para entidade para ser guardado no
-    banco de dados. Na última linha do loop chamamos o método getCategories() da entidade
-    e usamos o .add(cat) para inserir as categorias colocadas em cat na entidade.*/
+
     private void copyDtoToEntity(ProductDTO dto, Product entity) {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());

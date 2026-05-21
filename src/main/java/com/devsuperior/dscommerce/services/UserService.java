@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -45,7 +44,6 @@ public class UserService implements UserDetailsService {
             String username = jwtPrincipal.getClaim("username");
             User user = repository.findByEmail(username).get();
             return user;
-            //ou return repository.findByEmail(username).get();
         }
         catch (Exception e) {
             throw new UsernameNotFoundException("Email not found");
